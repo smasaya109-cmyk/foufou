@@ -9,8 +9,8 @@ function readLang(): Lang {
   return normalizeLang(stored);
 }
 
-export function useLang() {
-  const [lang, setLang] = useState<Lang>("ja");
+export function useLang(initial?: Lang) {
+  const [lang, setLang] = useState<Lang>(initial ?? "ja");
 
   useEffect(() => {
     setLang(readLang());
@@ -34,4 +34,3 @@ export function setLangClient(value: Lang) {
   document.cookie = `${LANG_KEY}=${normalized}; path=/; max-age=31536000`;
   window.dispatchEvent(new Event("foufou-lang-change"));
 }
-
