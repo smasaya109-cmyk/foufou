@@ -150,7 +150,7 @@ export const JA = {
     noData: "データがありません。"
   },
   group: {
-    createTitle: "旅行を作成",
+    createTitle: "グループを作成",
     createSub: "Freeの場合はOwnerアクティブ2件まで。",
     deleteConfirm: "このグループを削除します。元に戻せません。続行しますか？",
     deleteFailed: "削除に失敗しました",
@@ -231,10 +231,10 @@ export const JA = {
     subtitle: "Owner / 参加中の旅行を一覧表示",
     activeTitle: "アクティブ",
     archivedTitle: "アーカイブ済み",
-    create: "旅行を作成",
+    create: "グループを作成",
     freeLimitTitle: "無料枠は2グループまで",
     freeLimitDesc: "3件目からはProで無制限に作成できます。",
-    freeLimitAction: "プランを見る",
+    freeLimitAction: "プランを見る →",
     loginCta: "ログインへ",
     empty: "まだ旅行がありません。",
     archived: "アーカイブ（Proのみ)"
@@ -444,7 +444,7 @@ export const EN = {
     noData: "No data."
   },
   group: {
-    createTitle: "Create group",
+    createTitle: "Create a group",
     createSub: "Free plan allows up to 2 active groups.",
     deleteConfirm: "Delete this group? This cannot be undone.",
     deleteFailed: "Failed to delete",
@@ -528,7 +528,7 @@ export const EN = {
     create: "Create trip",
     freeLimitTitle: "Free plan: up to 2 groups",
     freeLimitDesc: "Create unlimited groups with Pro.",
-    freeLimitAction: "View plans",
+    freeLimitAction: "View plans →",
     loginCta: "Go to login",
     empty: "No trips yet.",
     archived: "Archive (Pro only)"

@@ -1,5 +1,8 @@
 import Image from "next/image";
 
+import Link from "next/link";
+import Image from "next/image";
+
 export default function PaywallBanner({
   title,
   description,
@@ -32,12 +35,12 @@ export default function PaywallBanner({
           </div>
         </div>
         {actionLabel && actionHref ? (
-          <a
+          <Link
             href={actionHref}
-            className="btn-primary inline-flex h-10 items-center justify-center px-4 text-xs"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--accent-strong)] hover:underline"
           >
-            {actionLabel}
-          </a>
+            <span>{actionLabel}</span>
+          </Link>
         ) : null}
       </div>
     </div>
