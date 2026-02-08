@@ -105,11 +105,13 @@ export default function LPClient({ initialLang }: Props) {
               {t("ボタンを押すとログイン画面へ移動します。", "Tapping the button takes you to login.")}
             </p>
           </div>
-          <img
-            src={lang === "en" ? "/hero-app-en.webp" : "/hero-app.webp"}
-            alt={t("アプリ画面のプレビュー", "App preview")}
-            className="mx-auto mt-10 w-full max-w-[72rem] origin-top scale-[1.2] object-contain md:-mt-2 md:origin-center md:scale-100 md:max-w-[50rem]"
-          />
+          <div className="mt-8 flex justify-center">
+            <img
+              src={lang === "en" ? "/hero-app-en.webp" : "/hero-app.webp"}
+              alt={t("アプリ画面のプレビュー", "App preview")}
+              className="w-[120%] max-w-none object-contain md:-mt-2 md:w-full md:max-w-[50rem]"
+            />
+          </div>
           <div className="mt-2 flex justify-center">
             <Link href="/login" className="btn-primary">
               {t("グループを作成する", "Create a group")}
