@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --bg-base: #f7fbff;
+  --bg-soft: #eef6fc;
+  --ink-strong: #0f1c2b;
+  --ink-muted: #5a6b7a;
+  --accent: #5db3e6;
+  --accent-strong: #3a93c7;
+  --accent-soft: #d9eefb;
+  --positive: #11a372;
+  --card: #ffffff;
+  --stroke: #d7e8f5;
+  --shadow: 0 10px 0 rgba(93, 179, 230, 0.08);
+}
+
+body {
+  font-family: "Fredoka", "Baloo 2", "M PLUS Rounded 1c", var(--font-body), var(--font-jp),
+    system-ui, sans-serif;
+  background: linear-gradient(180deg, #f7fbff 0%, #ffffff 55%, #f7fbff 100%);
+}
+
+.text-muted {
+  color: var(--ink-muted);
+}
+
+.card {
+  background: var(--card);
+  border-radius: 20px;
+  border: 2px solid var(--stroke);
+  box-shadow: var(--shadow);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 0.65rem 1.2rem;
+  font-weight: 700;
+  box-shadow: 0 6px 0 rgba(58, 147, 199, 0.35);
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+
+.btn-primary:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(58, 147, 199, 0.35);
+}
+
+.btn-outline {
+  border-radius: 999px;
+  border: 2px solid var(--stroke);
+  background: #ffffff;
+  padding: 0.6rem 1.1rem;
+  font-weight: 600;
+}
+
+.input-soft {
+  border-radius: 16px;
+  border: 2px solid var(--stroke);
+  background: #ffffff;
+  padding: 0.65rem 0.8rem;
+}
+
+.section-title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.soft-section {
+  background: var(--bg-soft);
+  border-radius: 20px;
+}
+
+.soft-shadow {
+  box-shadow: var(--shadow);
+}
+
+.pill {
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: floatIn 0.5s ease-out both;
+}
