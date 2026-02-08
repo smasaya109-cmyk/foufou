@@ -41,6 +41,11 @@ export default function ShareLinkCard({
 
   const shareUrl = token ? `${typeof window !== "undefined" ? window.location.origin : ""}/share/${token}` : "";
   const displayUrl = shareUrl || "";
+  const shortUrl = displayUrl
+    ? displayUrl.length > 36
+      ? `${displayUrl.slice(0, 24)}...${displayUrl.slice(-8)}`
+      : displayUrl
+    : "";
 
   return (
     <div className="card p-4 min-w-0 overflow-hidden">
@@ -54,7 +59,7 @@ export default function ShareLinkCard({
             className="min-w-0 w-full flex-1 overflow-hidden truncate rounded-xl border border-[var(--stroke)] bg-white px-3 py-2 text-xs whitespace-nowrap text-ellipsis"
             title={displayUrl}
           >
-            {displayUrl}
+            {shortUrl}
           </div>
           <button
             className="rounded-full border border-[var(--stroke)] px-3 py-2 text-xs sm:min-w-[84px]"
