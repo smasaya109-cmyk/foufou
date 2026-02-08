@@ -108,7 +108,7 @@ export default function LPClient({ initialLang }: Props) {
           <img
             src={lang === "en" ? "/hero-app-en.webp" : "/hero-app.webp"}
             alt={t("アプリ画面のプレビュー", "App preview")}
-            className="mx-auto mt-4 w-full max-w-[72rem] origin-top scale-[1.3] object-contain md:-mt-2 md:origin-center md:scale-100 md:max-w-[50rem]"
+            className="mx-auto mt-10 w-full max-w-[72rem] origin-top scale-[1.2] object-contain md:-mt-2 md:origin-center md:scale-100 md:max-w-[50rem]"
           />
           <div className="mt-2 flex justify-center">
             <Link href="/login" className="btn-primary">
