@@ -193,7 +193,7 @@ export default function AppPage() {
         description={copy.dashboard.freeLimitDesc}
         actionLabel={copy.dashboard.freeLimitAction}
         actionHref="/app/subscription"
-        iconSrc="/foufou_mascot.png"
+        iconSrc="/foufou_mascot.webp"
       />
 
       {isLoading && !data ? (

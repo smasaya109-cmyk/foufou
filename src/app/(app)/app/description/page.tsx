@@ -275,7 +275,7 @@ export default function DescriptionPage() {
           <p>{t("・共同編集や分析が必要ならPro。", "• Pro for collaboration and insights.")}</p>
           <p>{t("・写真共有や大人数の共同編集はPremium。", "• Premium for photos and large teams.")}</p>
           <div className="mt-3 flex items-center gap-3 rounded-2xl border border-[var(--stroke)] bg-white p-3">
-            <Image src="/foufou_mascot.png" alt="" width={40} height={40} />
+            <Image src="/foufou_mascot.webp" alt="" width={40} height={40} />
             <p className="text-sm text-muted">
               {t(
                 "プラン選びに迷ったら、まずはFreeから試してみましょう。",
