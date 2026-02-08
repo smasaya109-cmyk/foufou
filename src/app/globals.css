@@ -18,8 +18,8 @@
 }
 
 body {
-  font-family: "Fredoka", "Baloo 2", "M PLUS Rounded 1c", var(--font-body), var(--font-jp),
-    system-ui, sans-serif;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", "Hiragino Sans",
+    var(--font-body), var(--font-jp), system-ui, sans-serif;
   background: linear-gradient(180deg, #f7fbff 0%, #ffffff 55%, #f7fbff 100%);
 }
 
