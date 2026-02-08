@@ -1,7 +1,5 @@
 import Image from "next/image";
-
 import Link from "next/link";
-import Image from "next/image";
 
 export default function PaywallBanner({
   title,
@@ -30,8 +28,8 @@ export default function PaywallBanner({
             </span>
           ) : null}
           <div>
-          <p className="font-semibold text-[var(--accent-strong)]">{title}</p>
-          <p className="text-sm text-[var(--ink-muted)]">{description}</p>
+            <p className="font-semibold text-[var(--accent-strong)]">{title}</p>
+            <p className="text-sm text-[var(--ink-muted)]">{description}</p>
           </div>
         </div>
         {actionLabel && actionHref ? (
