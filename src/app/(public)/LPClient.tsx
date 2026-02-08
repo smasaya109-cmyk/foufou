@@ -34,7 +34,7 @@ export default function LPClient({ initialLang }: Props) {
         "支払いを追加すると、全員の画面に即反映。旅行中のやり取りが減り、誰が何を払ったかがその場で共有されます。",
         "Add an expense once and everyone sees it instantly. Less back-and-forth, clearer decisions."
       ),
-      image: lang === "en" ? "/feature-sync-en.png" : "/feature-sync.png",
+      image: lang === "en" ? "/feature-sync-en.webp" : "/feature-sync.webp",
       alt: t("同期を説明する画面", "Sync feature preview")
     },
     {
@@ -43,7 +43,7 @@ export default function LPClient({ initialLang }: Props) {
         "支払い一覧が見やすく並ぶので、状況をすぐ把握できます。精算提案も自動で出るため、話し合いの負担を最小限に。",
         "A clean list makes the current situation obvious. Auto settlement suggestions reduce discussion time."
       ),
-      image: lang === "en" ? "/feature-paid-en.png" : "/feature-paid.png",
+      image: lang === "en" ? "/feature-paid-en.webp" : "/feature-paid.webp",
       alt: t("支払い一覧の画面", "Expense list preview")
     },
     {
@@ -61,7 +61,7 @@ export default function LPClient({ initialLang }: Props) {
       <div className="mx-auto flex max-w-6xl flex-col gap-20 px-6 py-16">
         <section className="space-y-10 text-center">
           <Image
-            src={lang === "en" ? "/foufou_mascot-en.webp" : "/foufou_mascot.webp"}
+            src="/foufou_mascot.webp"
             alt={t("FouFouのマスコット", "FouFou mascot")}
             width={80}
             height={80}
@@ -103,7 +103,7 @@ export default function LPClient({ initialLang }: Props) {
             </p>
           </div>
           <img
-            src={lang === "en" ? "/hero-app-en.png" : "/hero-app.png"}
+            src={lang === "en" ? "/hero-app-en.webp" : "/hero-app.webp"}
             alt={t("アプリ画面のプレビュー", "App preview")}
             className="mx-auto -mt-2 max-h-[864px] w-full max-w-[72rem] object-contain"
           />
