@@ -52,7 +52,7 @@ export default function LPClient({ initialLang }: Props) {
         "ログイン不要で共有できるため、参加者への連絡がスムーズです。閲覧専用なので、誤って編集される心配もありません。",
         "Share without login for quick updates. View-only access keeps everything safe from accidental edits."
       ),
-      image: "/feature-paid.png",
+      image: "/future-share.webp",
       alt: t("共有リンクの画面", "Share link preview")
     }
   ];
