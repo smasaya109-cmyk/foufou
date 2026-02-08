@@ -54,29 +54,31 @@ export default function ShareLinkCard({
         {copy.group.shareDesc}
       </p>
       {token ? (
-        <div className="mt-3 flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
-          <div
-            className="min-w-0 w-full flex-1 overflow-hidden truncate rounded-xl border border-[var(--stroke)] bg-white px-3 py-2 text-xs whitespace-nowrap text-ellipsis"
-            title={displayUrl}
-          >
-            {shortUrl}
+        <div className="mt-3 flex min-w-0 flex-col gap-2">
+          <div className="relative min-w-0">
+            <div
+              className="min-w-0 w-full overflow-hidden truncate rounded-xl border border-[var(--stroke)] bg-white px-3 py-2 pr-16 text-xs whitespace-nowrap text-ellipsis"
+              title={displayUrl}
+            >
+              {shortUrl}
+            </div>
+            <button
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full border border-[var(--stroke)] bg-white px-2 py-1 text-[10px] text-[var(--ink-muted)]"
+              onClick={async () => {
+                if (!displayUrl) return;
+                try {
+                  await navigator.clipboard.writeText(displayUrl);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 1500);
+                } catch {
+                  setCopied(false);
+                }
+              }}
+              type="button"
+            >
+              {copied ? copy.group.shareCopied : copy.group.shareCopy}
+            </button>
           </div>
-          <button
-            className="rounded-full border border-[var(--stroke)] px-3 py-2 text-xs sm:min-w-[84px]"
-            onClick={async () => {
-              if (!displayUrl) return;
-              try {
-                await navigator.clipboard.writeText(displayUrl);
-                setCopied(true);
-                setTimeout(() => setCopied(false), 1500);
-              } catch {
-                setCopied(false);
-              }
-            }}
-            type="button"
-          >
-            {copied ? copy.group.shareCopied : copy.group.shareCopy}
-          </button>
         </div>
       ) : null}
       {error ? <p className="mt-2 text-xs text-red-600">{error}</p> : null}
