@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import Spinner from "@/components/common/Spinner";
 import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
@@ -198,7 +198,7 @@ export default function AppPage() {
 
       {isLoading && !data ? (
         <div className="flex items-center gap-3 text-sm text-muted">
-          <Image src="/loading.gif" alt="" width={24} height={24} unoptimized />
+          <Spinner size={20} />
           <span>{copy.common.loading}</span>
         </div>
       ) : error ? (

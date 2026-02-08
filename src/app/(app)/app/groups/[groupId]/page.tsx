@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
+import Spinner from "@/components/common/Spinner";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import GroupHeader from "@/components/group/GroupHeader";
@@ -472,7 +472,7 @@ export default function GroupPage({
           </div>
           {!expensesData ? (
             <div className="flex items-center gap-3 text-sm text-muted">
-              <Image src="/loading.gif" alt="" width={24} height={24} unoptimized />
+              <Spinner size={20} />
               <span>{copy.common.loading}</span>
             </div>
           ) : (

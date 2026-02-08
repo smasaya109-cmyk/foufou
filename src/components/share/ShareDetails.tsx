@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import Spinner from "@/components/common/Spinner";
 import Link from "next/link";
 
 import { clientAuth } from "@/lib/firebase-client";
@@ -63,7 +63,7 @@ export default function ShareDetails({ token }: { token: string }) {
     return (
       <section className="rounded-2xl border border-[var(--stroke)] bg-white p-6">
         <div className="flex items-center gap-3 text-sm text-[var(--ink-muted)]">
-          <Image src="/loading.gif" alt="" width={24} height={24} unoptimized />
+          <Spinner size={20} />
           <span>{copy.share.checking}</span>
         </div>
       </section>
