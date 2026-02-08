@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LangToggle from "@/components/common/LangToggle";
 import { cookies } from "next/headers";
 import { LANG_KEY, LEGACY_LANG_KEY, normalizeLang } from "@/lib/i18n";
 
@@ -222,12 +223,7 @@ export default function Home() {
             </Link>
           </div>
           <div className="flex items-center gap-2 rounded-full border border-[var(--stroke)] bg-white px-2 py-1">
-            <Link href="/api/lang?lang=ja" className={`px-3 py-1 text-xs ${lang === "ja" ? "rounded-full bg-[var(--accent)] text-white" : ""}`}>
-              日本語
-            </Link>
-            <Link href="/api/lang?lang=en" className={`px-3 py-1 text-xs ${lang === "en" ? "rounded-full bg-[var(--accent)] text-white" : ""}`}>
-              English
-            </Link>
+            <LangToggle />
           </div>
         </footer>
       </div>
