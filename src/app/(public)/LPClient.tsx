@@ -29,6 +29,7 @@ export default function LPClient({ initialLang }: Props) {
   ];
   const sections = [
     {
+      kicker: t("都度入力・反映", "Instant updates"),
       title: t("同期は数秒で完了", "Sync in seconds"),
       desc: t(
         "支払いを追加すると、全員の画面に即反映。旅行中のやり取りが減り、誰が何を払ったかがその場で共有されます。",
@@ -38,6 +39,7 @@ export default function LPClient({ initialLang }: Props) {
       alt: t("同期を説明する画面", "Sync feature preview")
     },
     {
+      kicker: t("リアルタイム精算", "Real-time settlement"),
       title: t("誰が払ったか一目で", "Everyone knows who paid"),
       desc: t(
         "支払い一覧が見やすく並ぶので、状況をすぐ把握できます。精算提案も自動で出るため、話し合いの負担を最小限に。",
@@ -47,6 +49,7 @@ export default function LPClient({ initialLang }: Props) {
       alt: t("支払い一覧の画面", "Expense list preview")
     },
     {
+      kicker: t("スムーズなシェア", "Smooth sharing"),
       title: t("閲覧共有リンク", "View-only sharing"),
       desc: t(
         "ログイン不要で共有できるため、参加者への連絡がスムーズです。閲覧専用なので、誤って編集される心配もありません。",
@@ -133,7 +136,7 @@ export default function LPClient({ initialLang }: Props) {
             >
               <div className="space-y-3">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted">
-                  {t("ポイント", "Highlight")}
+                  {item.kicker}
                 </p>
                 <h3 className="text-2xl font-semibold">{item.title}</h3>
                 <p className="text-sm text-muted">{item.desc}</p>
@@ -154,20 +157,53 @@ export default function LPClient({ initialLang }: Props) {
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            <div className="card p-6">
-              <h3 className="font-semibold">Free</h3>
-              <p className="mt-2 text-3xl font-semibold">¥0</p>
-              <p className="text-sm text-muted">{t("公開中", "Available")}</p>
+            <div className="card p-6 space-y-4">
+              <div>
+                <h3 className="font-semibold">Free</h3>
+                <p className="mt-2 text-3xl font-semibold">¥0</p>
+                <p className="text-xs text-muted">{t("ずっと無料", "Forever free")}</p>
+              </div>
+              <ul className="space-y-2 text-sm text-muted">
+                <li>{t("グループ作成2件まで", "Up to 2 groups")}</li>
+                <li>{t("支払い登録・自動精算", "Expenses + auto settlement")}</li>
+                <li>{t("基本の割り勘（均等/特定）", "Basic splits (equal / selected)")}</li>
+                <li>{t("共有（支払い/精算）", "Share view (expenses/settlement)")}</li>
+              </ul>
+              <button className="btn-outline w-full text-sm" disabled>
+                {t("準備中", "Coming soon")}
+              </button>
             </div>
-            <div className="card p-6">
-              <h3 className="font-semibold">Pro</h3>
-              <p className="mt-2 text-3xl font-semibold">¥880</p>
-              <p className="text-sm text-muted">{t("準備中", "Coming soon")}</p>
+            <div className="card p-6 space-y-4 border-2 border-[var(--accent)]">
+              <div>
+                <h3 className="font-semibold">Pro</h3>
+                <p className="mt-2 text-3xl font-semibold">¥880</p>
+                <p className="text-xs text-muted">{t("月額 / 年額も同時に提供予定", "Monthly / yearly coming")}</p>
+              </div>
+              <ul className="space-y-2 text-sm text-muted">
+                <li>{t("グループ作成無制限", "Unlimited groups")}</li>
+                <li>{t("高度な割り勘（割合/端数/グループ別）", "Advanced splits (ratio/rounding/subgroups)")}</li>
+                <li>{t("集計・分析", "Insights & reports")}</li>
+                <li>{t("CSV出力", "CSV export")}</li>
+                <li>{t("共同編集3名まで", "Up to 3 editors")}</li>
+              </ul>
+              <button className="btn-primary w-full text-sm" disabled>
+                {t("準備中", "Coming soon")}
+              </button>
             </div>
-            <div className="card p-6">
-              <h3 className="font-semibold">Premium</h3>
-              <p className="mt-2 text-3xl font-semibold">¥1,480</p>
-              <p className="text-sm text-muted">{t("準備中", "Coming soon")}</p>
+            <div className="card p-6 space-y-4">
+              <div>
+                <h3 className="font-semibold">Premium</h3>
+                <p className="mt-2 text-3xl font-semibold">¥1,480</p>
+                <p className="text-xs text-muted">{t("月額 / 年額も同時に提供予定", "Monthly / yearly coming")}</p>
+              </div>
+              <ul className="space-y-2 text-sm text-muted">
+                <li>{t("写真共有（思い出）", "Photo memories")}</li>
+                <li>{t("共同編集無制限", "Unlimited editors")}</li>
+                <li>{t("Proの全機能", "All Pro features")}</li>
+              </ul>
+              <button className="btn-outline w-full text-sm" disabled>
+                {t("準備中", "Coming soon")}
+              </button>
             </div>
           </div>
         </section>
