@@ -13,12 +13,14 @@ import { getCopy } from "@/lib/i18n";
 
 export default function MembersPage({ params }: { params: { groupId: string } }) {
   const { data: groupData } = useSWR(`/api/groups/${params.groupId}`, swrFetcher, {
-    revalidateOnFocus: false
+    revalidateOnFocus: false,
+    keepPreviousData: true,
+    dedupingInterval: 15000
   });
   const { data: membersData, mutate } = useSWR(
     `/api/groups/${params.groupId}/members`,
     swrFetcher,
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: false, keepPreviousData: true, dedupingInterval: 15000 }
   );
   const groupName = groupData?.group?.title ?? "—";
   const groupIcon = groupData?.group?.icon ?? "🧳";

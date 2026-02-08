@@ -14,7 +14,7 @@ export default function BottomNav() {
     <div className="fixed bottom-4 left-0 right-0 z-30 mx-auto flex w-full max-w-md items-center justify-between rounded-full border-2 border-[var(--stroke)] bg-white px-6 py-3 text-sm shadow-lg md:hidden">
       <Link
         href="/app"
-        className={`flex flex-col items-center gap-1 ${
+        className={`flex flex-col items-center gap-1 touch-manipulation active:scale-95 ${
           pathname === "/app" ? "text-[var(--accent)]" : "text-muted"
         }`}
       >
@@ -23,7 +23,7 @@ export default function BottomNav() {
       </Link>
       <Link
         href="/app/subscription"
-        className={`flex flex-col items-center gap-1 ${
+        className={`flex flex-col items-center gap-1 touch-manipulation active:scale-95 ${
           pathname === "/app/subscription" ? "text-[var(--accent)]" : "text-muted"
         }`}
       >
@@ -32,7 +32,7 @@ export default function BottomNav() {
       </Link>
       <Link
         href="/app/description"
-        className={`flex flex-col items-center gap-1 ${
+        className={`flex flex-col items-center gap-1 touch-manipulation active:scale-95 ${
           pathname === "/app/description" ? "text-[var(--accent)]" : "text-muted"
         }`}
       >
@@ -41,7 +41,7 @@ export default function BottomNav() {
       </Link>
       <Link
         href="/app/profile"
-        className={`flex flex-col items-center gap-1 ${
+        className={`flex flex-col items-center gap-1 touch-manipulation active:scale-95 ${
           pathname === "/app/profile" ? "text-[var(--accent)]" : "text-muted"
         }`}
       >

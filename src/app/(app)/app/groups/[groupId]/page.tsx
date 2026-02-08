@@ -58,12 +58,14 @@ export default function GroupPage({
   const [exportPending, setExportPending] = useState(false);
 
   const { data: groupData } = useSWR(`/api/groups/${params.groupId}`, swrFetcher, {
-    revalidateOnFocus: false
+    revalidateOnFocus: false,
+    keepPreviousData: true,
+    dedupingInterval: 15000
   });
   const { data: expensesData, mutate: mutateExpenses } = useSWR(
     `/api/groups/${params.groupId}/expenses`,
     swrFetcher,
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: false, keepPreviousData: true, dedupingInterval: 15000 }
   );
 
   useEffect(() => {

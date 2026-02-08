@@ -18,7 +18,9 @@ import { getCopy } from "@/lib/i18n";
 export default function SettingsPage({ params }: { params: { groupId: string } }) {
   const router = useRouter();
   const { data: groupData, mutate } = useSWR(`/api/groups/${params.groupId}`, swrFetcher, {
-    revalidateOnFocus: false
+    revalidateOnFocus: false,
+    keepPreviousData: true,
+    dedupingInterval: 15000
   });
   const groupName = groupData?.group?.title ?? "";
   const groupIcon = groupData?.group?.icon ?? "🧳";
@@ -36,7 +38,7 @@ export default function SettingsPage({ params }: { params: { groupId: string } }
   const { data: editorData, mutate: mutateEditors } = useSWR(
     `/api/groups/${params.groupId}/editors`,
     swrFetcher,
-    { revalidateOnFocus: false }
+    { revalidateOnFocus: false, keepPreviousData: true, dedupingInterval: 15000 }
   );
   const [editorEmail, setEditorEmail] = useState("");
   const [editorPending, setEditorPending] = useState(false);

@@ -29,7 +29,9 @@ export default function AppPage() {
   const lang = useLang();
   const copy = getCopy(lang);
   const { data, error, isLoading, mutate } = useSWR("/api/groups", swrFetcher, {
-    revalidateOnFocus: false
+    revalidateOnFocus: false,
+    keepPreviousData: true,
+    dedupingInterval: 15000
   });
   const groups = (data?.groups ?? []) as GroupData[];
   const userPlan = data?.plan ?? "free";

@@ -34,7 +34,7 @@ export default function LPClient({ initialLang }: Props) {
         "支払いを追加すると、全員の画面に即反映。旅行中のやり取りが減り、誰が何を払ったかがその場で共有されます。",
         "Add an expense once and everyone sees it instantly. Less back-and-forth, clearer decisions."
       ),
-      image: "/feature-sync.webp",
+      image: "/feature-sync.png",
       alt: t("同期を説明する画面", "Sync feature preview")
     },
     {
@@ -43,7 +43,7 @@ export default function LPClient({ initialLang }: Props) {
         "支払い一覧が見やすく並ぶので、状況をすぐ把握できます。精算提案も自動で出るため、話し合いの負担を最小限に。",
         "A clean list makes the current situation obvious. Auto settlement suggestions reduce discussion time."
       ),
-      image: "/feature-paid.webp",
+      image: "/feature-paid.png",
       alt: t("支払い一覧の画面", "Expense list preview")
     },
     {
@@ -52,7 +52,7 @@ export default function LPClient({ initialLang }: Props) {
         "ログイン不要で共有できるため、参加者への連絡がスムーズです。閲覧専用なので、誤って編集される心配もありません。",
         "Share without login for quick updates. View-only access keeps everything safe from accidental edits."
       ),
-      image: "/feature-paid.webp",
+      image: "/feature-paid.png",
       alt: t("共有リンクの画面", "Share link preview")
     }
   ];
@@ -92,7 +92,7 @@ export default function LPClient({ initialLang }: Props) {
             </p>
           </div>
           <img
-            src="/hero-app.webp"
+            src="/hero-app.png"
             alt={t("アプリ画面のプレビュー", "App preview")}
             className="mx-auto -mt-2 max-h-[864px] w-full max-w-[72rem] object-contain"
           />

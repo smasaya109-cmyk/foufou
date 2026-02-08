@@ -43,13 +43,13 @@ export default function ShareLinkCard({
   const displayUrl = shareUrl || "";
 
   return (
-    <div className="card p-4 min-w-0">
+    <div className="card p-4 min-w-0 overflow-hidden">
       <p className="font-semibold">{copy.group.shareTitle}</p>
       <p className="text-sm text-muted">
         {copy.group.shareDesc}
       </p>
       {token ? (
-        <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center min-w-0">
+        <div className="mt-3 flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
           <div
             className="min-w-0 flex-1 truncate rounded-xl border border-[var(--stroke)] bg-white px-3 py-2 text-xs"
             title={displayUrl}

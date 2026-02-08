@@ -20,7 +20,7 @@ export default function GroupTabs({
     { id: "settings", label: copy.tabs.settings }
   ];
   return (
-    <div className="w-full overflow-x-auto py-1">
+    <div className="w-full overflow-x-auto py-1 touch-pan-x">
       <div className="flex min-w-max flex-nowrap gap-2 pr-2">
       {tabs.map((tab) => {
         const href =
@@ -34,7 +34,7 @@ export default function GroupTabs({
           <Link
             key={tab.id}
             href={href}
-            className={`shrink-0 rounded-full px-4 py-2 text-sm transition ${
+            className={`shrink-0 rounded-full px-4 py-2 text-sm transition touch-manipulation active:scale-95 ${
               isActive
                 ? "bg-[var(--accent)] text-white"
                 : "border border-[var(--stroke)] bg-white text-neutral-700"
