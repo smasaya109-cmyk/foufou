@@ -6,7 +6,6 @@ import GroupHeader from "@/components/group/GroupHeader";
 import GroupTabs from "@/components/group/GroupTabs";
 import MemberTable, { MemberItem } from "@/components/members/MemberTable";
 import Alert from "@/components/common/Alert";
-import GroupPassCard from "@/components/members/GroupPassCard";
 import { fetchWithAuth } from "@/lib/client-api";
 import { swrFetcher } from "@/lib/swr";
 import { useLang } from "@/hooks/useLang";
@@ -139,7 +138,6 @@ export default function MembersPage({ params }: { params: { groupId: string } })
             </button>
             {localError ? <Alert message={localError} /> : null}
           </div>
-          <GroupPassCard />
         </div>
       </div>
     </div>

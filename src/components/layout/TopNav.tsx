@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cookies } from "next/headers";
 import PremiumBadge from "@/components/group/PremiumBadge";
 import { LANG_KEY, LEGACY_LANG_KEY, getCopy, normalizeLang } from "@/lib/i18n";
@@ -20,7 +21,7 @@ export default function TopNav({
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 md:px-6">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white shadow-sm">
-            <img src="/foufou_mascot.png" alt="Foufou" className="h-8 w-8" />
+            <Image src="/foufou_mascot.png" alt="Foufou" width={32} height={32} priority />
           </div>
           <div className="flex items-center gap-2">
             <span className="text-lg font-semibold">FouFou</span>

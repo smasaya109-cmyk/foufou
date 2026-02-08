@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import LangToggle from "@/components/common/LangToggle";
 import { useLang } from "@/hooks/useLang";
 import type { Lang } from "@/lib/i18n";
@@ -59,10 +60,13 @@ export default function LPClient({ initialLang }: Props) {
     <main className="bg-[var(--bg-surface)]">
       <div className="mx-auto flex max-w-6xl flex-col gap-20 px-6 py-16">
         <section className="space-y-10 text-center">
-          <img
+          <Image
             src="/foufou_mascot.png"
             alt={t("FouFouのマスコット", "FouFou mascot")}
-            className="mx-auto h-20 w-20 object-contain"
+            width={80}
+            height={80}
+            className="mx-auto object-contain"
+            priority
           />
           <div className="space-y-4">
             <p className="pill mx-auto w-fit bg-[var(--accent)] text-white">FouFou</p>

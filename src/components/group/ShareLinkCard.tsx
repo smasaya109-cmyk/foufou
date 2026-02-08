@@ -43,7 +43,7 @@ export default function ShareLinkCard({
   const displayUrl = shareUrl || "";
 
   return (
-    <div className="card p-4">
+    <div className="card p-4 min-w-0">
       <p className="font-semibold">{copy.group.shareTitle}</p>
       <p className="text-sm text-muted">
         {copy.group.shareDesc}

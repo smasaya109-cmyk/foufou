@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import GroupHeader from "@/components/group/GroupHeader";
@@ -471,7 +472,7 @@ export default function GroupPage({
           </div>
           {!expensesData ? (
             <div className="flex items-center gap-3 text-sm text-muted">
-              <img src="/loading.gif" alt="" className="h-6 w-6" />
+              <Image src="/loading.gif" alt="" width={24} height={24} unoptimized />
               <span>{copy.common.loading}</span>
             </div>
           ) : (

@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function PaywallBanner({
   title,
   description,
@@ -18,11 +20,7 @@ export default function PaywallBanner({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-start gap-3">
           {iconSrc ? (
-            <img
-              src={iconSrc}
-              alt=""
-              className="h-10 w-10 object-contain"
-            />
+            <Image src={iconSrc} alt="" width={40} height={40} />
           ) : icon ? (
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-2xl">
               {icon}

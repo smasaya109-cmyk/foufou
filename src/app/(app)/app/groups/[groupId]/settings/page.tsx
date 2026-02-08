@@ -195,7 +195,7 @@ export default function SettingsPage({ params }: { params: { groupId: string } }
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 overflow-x-hidden">
       <GroupHeader title={groupName} icon={groupIcon} premiumLabel={premiumLabel} />
       <GroupTabs groupId={params.groupId} active="settings" />
 
@@ -205,7 +205,7 @@ export default function SettingsPage({ params }: { params: { groupId: string } }
         <div className="space-y-5">
           <div className="card p-5 space-y-4">
             <p className="font-semibold">{copy.group.groupName}</p>
-            <div className="flex items-center gap-3">
+            <div className="flex min-w-0 items-center gap-3">
               <div className="relative">
                 <button
                   type="button"
@@ -236,7 +236,7 @@ export default function SettingsPage({ params }: { params: { groupId: string } }
                 ) : null}
               </div>
               <input
-                className="input-soft w-full text-sm"
+                className="input-soft w-full min-w-0 text-sm"
                 value={titleInput}
                 onChange={(event) => setTitleInput(event.target.value)}
               />
