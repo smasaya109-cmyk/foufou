@@ -69,6 +69,7 @@ export async function POST(request: Request) {
           const subscription = await stripe.subscriptions.retrieve(subscriptionId);
           await adminDb.collection("users").doc(userId).set(
             {
+              stripeCustomerId: session.customer?.toString() ?? subscription.customer?.toString() ?? null,
               proStatus: subscription.status === "active" ? "active" : "inactive",
               proPlan: planTier,
               proExpiresAt: subscription.current_period_end
@@ -90,6 +91,7 @@ export async function POST(request: Request) {
       if (userId) {
         await adminDb.collection("users").doc(userId).set(
           {
+            stripeCustomerId: subscription.customer?.toString() ?? null,
             proStatus: subscription.status === "active" ? "active" : "inactive",
             proPlan: planTier,
             proExpiresAt: subscription.current_period_end
