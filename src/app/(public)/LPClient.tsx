@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 import LangToggle from "@/components/common/LangToggle";
 import { useLang } from "@/hooks/useLang";
 import type { Lang } from "@/lib/i18n";
@@ -13,6 +14,8 @@ type Props = {
 export default function LPClient({ initialLang }: Props) {
   const lang = useLang(initialLang);
   const t = (ja: string, en: string) => (lang === "en" ? en : ja);
+  const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
+  const isMonthly = billing === "monthly";
   const highlights = [
     {
       title: t("リアルタイムで共有", "Real-time updates"),
@@ -154,58 +157,157 @@ export default function LPClient({ initialLang }: Props) {
               {t("料金プラン", "Pricing")}
             </p>
             <h2 className="text-3xl font-semibold">{t("自分に合ったプランを選択", "Pick your plan")}</h2>
-            <p className="mt-2 text-sm text-muted">
-              {t("料金プランは準備中です。", "Pricing is being prepared.")}
-            </p>
+          </div>
+          <div className="flex w-full justify-center">
+            <div className="inline-flex items-center rounded-full border-2 border-[var(--stroke)] bg-white p-1 text-xs">
+              <button
+                className={`rounded-full px-4 py-2 font-semibold ${
+                  isMonthly ? "bg-[var(--accent)] text-white" : "text-[var(--ink-muted)]"
+                }`}
+                onClick={() => setBilling("monthly")}
+              >
+                {t("月ごと", "Monthly")}
+              </button>
+              <button
+                className={`rounded-full px-4 py-2 font-semibold ${
+                  !isMonthly ? "bg-[var(--accent)] text-white" : "text-[var(--ink-muted)]"
+                }`}
+                onClick={() => setBilling("yearly")}
+              >
+                {t("年ごと", "Yearly")}
+                <span className="ml-2 rounded-full bg-[var(--accent-soft)] px-2 py-0.5 text-[10px] text-[var(--accent-strong)]">
+                  {t("お得", "Deal")}
+                </span>
+              </button>
+            </div>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            <div className="card p-6 space-y-4">
-              <div>
-                <h3 className="font-semibold">Free</h3>
-                <p className="mt-2 text-3xl font-semibold">¥0</p>
-                <p className="text-xs text-muted">{t("ずっと無料", "Forever free")}</p>
+            <div className="card flex h-full flex-col p-6">
+              <p className="text-sm font-semibold text-muted">{t("Freeプラン", "Free")}</p>
+              <div className="mt-3 flex min-h-[72px] flex-wrap items-baseline gap-2">
+                <span className="text-3xl font-extrabold leading-none">¥0</span>
+                <span className="text-sm text-muted">{t("/月", "/mo")}</span>
+                <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--bg-soft)] px-2 py-0.5 text-[10px] text-[var(--ink-muted)]">
+                  {t("ずっと無料", "Free forever")}
+                </span>
               </div>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>{t("グループ作成2件まで", "Up to 2 groups")}</li>
-                <li>{t("支払い登録・自動精算", "Expenses + auto settlement")}</li>
-                <li>{t("基本の割り勘（均等/特定）", "Basic splits (equal / selected)")}</li>
-                <li>{t("共有（支払い/精算）", "Share view (expenses/settlement)")}</li>
+              <ul className="mt-4 space-y-3 text-sm">
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]">
+                    ✓
+                  </span>
+                  <span>{t("グループ作成2件まで", "Up to 2 groups")}</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]">
+                    ✓
+                  </span>
+                  <span>{t("支払い登録・自動精算", "Expenses + settlement")}</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]">
+                    ✓
+                  </span>
+                  <span>{t("基本の割り勘（均等/特定）", "Basic splits (equal/selected)")}</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]">
+                    ✓
+                  </span>
+                  <span>{t("共有（支払い/精算）", "Share view (expenses/settlement)")}</span>
+                </li>
               </ul>
-              <Link href="/signup" className="btn-outline w-full text-center text-sm">
-                {t("無料ではじめる", "Start free")}
-              </Link>
+              <div className="mt-auto pt-6">
+                <Link href="/signup" className="btn-outline inline-flex h-12 w-full items-center justify-center">
+                  {t("無料ではじめる", "Start free")}
+                </Link>
+              </div>
             </div>
-            <div className="card p-6 space-y-4 border-2 border-[var(--accent)]">
-              <div>
-                <h3 className="font-semibold">Pro</h3>
-                <p className="mt-2 text-3xl font-semibold">¥880</p>
-                <p className="text-xs text-muted">{t("月額 / 年額も同時に提供予定", "Monthly / yearly coming")}</p>
+            <div className="card flex h-full flex-col border-2 border-[var(--accent)] p-6">
+              <p className="text-sm font-semibold text-[var(--accent-strong)]">{t("Proプラン", "Pro")}</p>
+              <div className="mt-3 flex min-h-[72px] flex-wrap items-baseline gap-2">
+                <span className="text-3xl font-extrabold leading-none">
+                  {isMonthly ? "¥880" : "¥6,600"}
+                </span>
+                <span className="text-sm text-muted">{isMonthly ? t("/月", "/mo") : t("/年", "/yr")}</span>
+                <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--accent-soft)] px-2 py-0.5 text-[10px] text-[var(--accent-strong)]">
+                  {isMonthly ? t("¥6,600/年", "¥6,600/yr") : t("¥550/月相当", "¥550/mo eq.")}
+                </span>
               </div>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>{t("グループ作成無制限", "Unlimited groups")}</li>
-                <li>{t("高度な割り勘（割合/端数/グループ別）", "Advanced splits (ratio/rounding/subgroups)")}</li>
-                <li>{t("集計・分析", "Insights & reports")}</li>
-                <li>{t("CSV出力", "CSV export")}</li>
-                <li>{t("共同編集3名まで", "Up to 3 editors")}</li>
+              <ul className="mt-4 space-y-3 text-sm">
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-white">
+                    ★
+                  </span>
+                  <span>{t("グループ作成無制限", "Unlimited groups")}</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-white">
+                    ★
+                  </span>
+                  <span>{t("高度な割り勘（割合/端数/グループ別）", "Advanced splits (ratio/rounding/subgroups)")}</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-white">
+                    ★
+                  </span>
+                  <span>{t("集計・分析", "Insights & reports")}</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-white">
+                    ★
+                  </span>
+                  <span>{t("CSV出力", "CSV export")}</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-white">
+                    ★
+                  </span>
+                  <span>{t("共同編集3名まで", "Up to 3 editors")}</span>
+                </li>
               </ul>
-              <Link href="/app/subscription" className="btn-primary w-full text-center text-sm">
-                {t("Proをはじめる →", "Start Pro →")}
-              </Link>
+              <div className="mt-auto pt-6">
+                <Link href="/app/subscription" className="btn-primary inline-flex h-12 w-full items-center justify-center">
+                  {t("Proをはじめる →", "Start Pro →")}
+                </Link>
+              </div>
             </div>
-            <div className="card p-6 space-y-4">
-              <div>
-                <h3 className="font-semibold">Premium</h3>
-                <p className="mt-2 text-3xl font-semibold">¥1,480</p>
-                <p className="text-xs text-muted">{t("月額 / 年額も同時に提供予定", "Monthly / yearly coming")}</p>
+            <div className="card flex h-full flex-col p-6">
+              <p className="text-sm font-semibold text-muted">{t("Premium", "Premium")}</p>
+              <div className="mt-3 flex min-h-[72px] flex-wrap items-baseline gap-2">
+                <span className="text-3xl font-extrabold leading-none">
+                  {isMonthly ? "¥1,480" : "¥11,880"}
+                </span>
+                <span className="text-sm text-muted">{isMonthly ? t("/月", "/mo") : t("/年", "/yr")}</span>
+                <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--bg-soft)] px-2 py-0.5 text-[10px] text-[var(--ink-muted)]">
+                  {isMonthly ? t("¥11,880/年", "¥11,880/yr") : t("¥990/月相当", "¥990/mo eq.")}
+                </span>
               </div>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>{t("写真共有（思い出）", "Photo memories")}</li>
-                <li>{t("共同編集無制限", "Unlimited editors")}</li>
-                <li>{t("Proの全機能", "All Pro features")}</li>
+              <ul className="mt-4 space-y-3 text-sm">
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]">
+                    ✓
+                  </span>
+                  <span>{t("写真共有（思い出）", "Photo memories")}</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]">
+                    ✓
+                  </span>
+                  <span>{t("共同編集無制限", "Unlimited editors")}</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]">
+                    ✓
+                  </span>
+                  <span>{t("Proの全機能", "All Pro features")}</span>
+                </li>
               </ul>
-              <Link href="/app/subscription" className="btn-outline w-full text-center text-sm">
-                {t("Premiumをはじめる", "Start Premium")}
-              </Link>
+              <div className="mt-auto pt-6">
+                <Link href="/app/subscription" className="btn-outline inline-flex h-12 w-full items-center justify-center">
+                  {t("Premiumをはじめる", "Start Premium")}
+                </Link>
+              </div>
             </div>
           </div>
         </section>
