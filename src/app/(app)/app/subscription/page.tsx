@@ -145,11 +145,11 @@ export default function SubscriptionPage() {
             <p className="text-sm font-semibold text-[var(--accent-strong)]">{copy.subscription.proPlan}</p>
             <div className="mt-3 flex min-h-[72px] flex-wrap items-baseline gap-2">
               <span className="text-3xl font-extrabold leading-none">
-                {isMonthly ? "¥880" : "¥6,600"}
+                  {isMonthly ? "¥880" : "¥10,560"}
               </span>
               <span className="text-sm text-muted">{isMonthly ? copy.subscription.perMonth : copy.subscription.perYear}</span>
               <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--accent-soft)] px-2 py-0.5 text-[10px] text-[var(--accent-strong)]">
-                {isMonthly ? copy.subscription.priceYearlyPro : copy.subscription.priceMonthlyEquivalentPro}
+                {isMonthly ? "¥10,560/年" : "¥550/月相当"}
               </span>
             </div>
             <ul className="mt-4 space-y-3 text-sm">
@@ -214,11 +214,11 @@ export default function SubscriptionPage() {
             <p className="text-sm font-semibold text-muted">{copy.subscription.premiumPlan}</p>
             <div className="mt-3 flex min-h-[72px] flex-wrap items-baseline gap-2">
               <span className="text-3xl font-extrabold leading-none">
-                {isMonthly ? "¥1,480" : "¥11,880"}
+                {isMonthly ? "¥1,480" : "¥17,760"}
               </span>
               <span className="text-sm text-muted">{isMonthly ? copy.subscription.perMonth : copy.subscription.perYear}</span>
               <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--bg-soft)] px-2 py-0.5 text-[10px] text-[var(--ink-muted)]">
-                {isMonthly ? copy.subscription.priceYearlyPremium : copy.subscription.priceMonthlyEquivalentPremium}
+                {isMonthly ? "¥17,760/年" : "¥990/月相当"}
               </span>
             </div>
             <ul className="mt-4 space-y-3 text-sm">
