@@ -171,9 +171,9 @@ export default function LPClient({ initialLang }: Props) {
                 <li>{t("基本の割り勘（均等/特定）", "Basic splits (equal / selected)")}</li>
                 <li>{t("共有（支払い/精算）", "Share view (expenses/settlement)")}</li>
               </ul>
-              <button className="btn-outline w-full text-sm" disabled>
-                {t("準備中", "Coming soon")}
-              </button>
+              <Link href="/signup" className="btn-outline w-full text-center text-sm">
+                {t("無料ではじめる", "Start free")}
+              </Link>
             </div>
             <div className="card p-6 space-y-4 border-2 border-[var(--accent)]">
               <div>
@@ -188,9 +188,9 @@ export default function LPClient({ initialLang }: Props) {
                 <li>{t("CSV出力", "CSV export")}</li>
                 <li>{t("共同編集3名まで", "Up to 3 editors")}</li>
               </ul>
-              <button className="btn-primary w-full text-sm" disabled>
-                {t("準備中", "Coming soon")}
-              </button>
+              <Link href="/app/subscription" className="btn-primary w-full text-center text-sm">
+                {t("Proをはじめる →", "Start Pro →")}
+              </Link>
             </div>
             <div className="card p-6 space-y-4">
               <div>
@@ -203,9 +203,9 @@ export default function LPClient({ initialLang }: Props) {
                 <li>{t("共同編集無制限", "Unlimited editors")}</li>
                 <li>{t("Proの全機能", "All Pro features")}</li>
               </ul>
-              <button className="btn-outline w-full text-sm" disabled>
-                {t("準備中", "Coming soon")}
-              </button>
+              <Link href="/app/subscription" className="btn-outline w-full text-center text-sm">
+                {t("Premiumをはじめる", "Start Premium")}
+              </Link>
             </div>
           </div>
         </section>
