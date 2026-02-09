@@ -8,7 +8,7 @@ import { useLang } from "@/hooks/useLang";
 import { getCopy } from "@/lib/i18n";
 
 export default function SubscriptionPage() {
-  const paymentsDisabled = true;
+  const paymentsDisabled = false;
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
   const isMonthly = billing === "monthly";
   const [proPending, setProPending] = useState(false);
