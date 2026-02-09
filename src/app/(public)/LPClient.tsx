@@ -227,7 +227,7 @@ export default function LPClient({ initialLang }: Props) {
               <p className="text-sm font-semibold text-[var(--accent-strong)]">{t("Proプラン", "Pro")}</p>
               <div className="mt-3 flex min-h-[72px] flex-wrap items-baseline gap-2">
                 <span className="text-3xl font-extrabold leading-none">
-                  {isMonthly ? "¥880" : "¥10,560"}
+                  {isMonthly ? "¥880" : "¥6,600"}
                 </span>
                 <span className="text-sm text-muted">{isMonthly ? t("/月", "/mo") : t("/年", "/yr")}</span>
                 <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--accent-soft)] px-2 py-0.5 text-[10px] text-[var(--accent-strong)]">
@@ -276,7 +276,7 @@ export default function LPClient({ initialLang }: Props) {
               <p className="text-sm font-semibold text-muted">{t("Premium", "Premium")}</p>
               <div className="mt-3 flex min-h-[72px] flex-wrap items-baseline gap-2">
                 <span className="text-3xl font-extrabold leading-none">
-                  {isMonthly ? "¥1,480" : "¥17,760"}
+                  {isMonthly ? "¥1,480" : "¥11,880"}
                 </span>
                 <span className="text-sm text-muted">{isMonthly ? t("/月", "/mo") : t("/年", "/yr")}</span>
                 <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--bg-soft)] px-2 py-0.5 text-[10px] text-[var(--ink-muted)]">
