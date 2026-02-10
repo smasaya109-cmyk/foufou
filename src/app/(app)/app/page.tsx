@@ -33,7 +33,7 @@ export default function AppPage() {
     keepPreviousData: true,
     dedupingInterval: 15000
   });
-  const groups = (data?.groups ?? []) as GroupData[];
+  const groups = useMemo(() => (data?.groups ?? []) as GroupData[], [data?.groups]);
   const userPlan = data?.plan ?? "free";
   const canArchive = userPlan !== "free";
   const [actionGroup, setActionGroup] = useState<GroupData | null>(null);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Spinner from "@/components/common/Spinner";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
@@ -127,20 +127,29 @@ export default function GroupPage({
   const canUsePro = Boolean(entitlements?.canUsePremium);
   const canUsePhotos = Boolean(entitlements?.canUsePhotos);
 
-  async function loadSettlementLatest() {
+  const computeSettlement = useCallback(async () => {
+    const data = await fetchWithAuth(`/api/groups/${params.groupId}/settlements/compute`, {
+      method: "POST"
+    });
+    setSettlement({
+      payloadJson: { balances: data.balances, transfers: data.transfers }
+    });
+  }, [params.groupId]);
+
+  const loadSettlementLatest = useCallback(async () => {
     const data = await fetchWithAuth(`/api/groups/${params.groupId}/settlements/latest`);
     if (data?.settlement) {
       setSettlement(data.settlement);
       return;
     }
     await computeSettlement();
-  }
+  }, [params.groupId, computeSettlement]);
 
   useEffect(() => {
     if (tab !== "settlement") return;
     if (settlement) return;
     loadSettlementLatest().catch(() => {});
-  }, [tab, settlement]);
+  }, [tab, settlement, loadSettlementLatest]);
 
   const transferItems = useMemo(() => {
     const transfers = settlement?.payloadJson?.transfers ?? [];
@@ -160,60 +169,63 @@ export default function GroupPage({
     }));
   }, [settlement, memberMap]);
 
-  const rawExpenses = (groupData?.expenses ?? []) as any[];
-  const emojiMap: Record<string, string> = {
-    accommodation: "🏨",
-    entertainment: "🎤",
-    groceries: "🛒",
-    healthcare: "🦷",
-    insurance: "🧯",
-    rent: "🏠",
-    food: "🍔",
-    shopping: "🛍️",
-    transport: "🚃",
-    general: "✦"
-  };
-  const labelMap: Record<string, string> = {
-    accommodation: lang === "en" ? "Accommodation" : "宿泊",
-    entertainment: lang === "en" ? "Entertainment" : "エンタメ",
-    groceries: lang === "en" ? "Groceries" : "食材・買い物",
-    healthcare: lang === "en" ? "Healthcare" : "医療",
-    insurance: lang === "en" ? "Insurance" : "保険",
-    rent: lang === "en" ? "Rent & Charges" : "宿代・チャージ",
-    food: lang === "en" ? "Food & Drinks" : "飲食",
-    shopping: lang === "en" ? "Shopping" : "ショッピング",
-    transport: lang === "en" ? "Transport" : "交通",
-    general: lang === "en" ? "General" : "一般"
-  };
+  const rawExpenses = useMemo(
+    () => (groupData?.expenses ?? []) as any[],
+    [groupData?.expenses]
+  );
+  const emojiMap = useMemo(
+    () => ({
+      accommodation: "🏨",
+      entertainment: "🎤",
+      groceries: "🛒",
+      healthcare: "🦷",
+      insurance: "🧯",
+      rent: "🏠",
+      food: "🍔",
+      shopping: "🛍️",
+      transport: "🚃",
+      general: "✦"
+    }),
+    []
+  );
+  const labelMap = useMemo(
+    () => ({
+      accommodation: lang === "en" ? "Accommodation" : "宿泊",
+      entertainment: lang === "en" ? "Entertainment" : "エンタメ",
+      groceries: lang === "en" ? "Groceries" : "食材・買い物",
+      healthcare: lang === "en" ? "Healthcare" : "医療",
+      insurance: lang === "en" ? "Insurance" : "保険",
+      rent: lang === "en" ? "Rent & Charges" : "宿代・チャージ",
+      food: lang === "en" ? "Food & Drinks" : "飲食",
+      shopping: lang === "en" ? "Shopping" : "ショッピング",
+      transport: lang === "en" ? "Transport" : "交通",
+      general: lang === "en" ? "General" : "一般"
+    }),
+    [lang]
+  );
 
   const expenses = useMemo<ExpenseItem[]>(
     () =>
-      rawExpenses.map((exp: any) => ({
-        id: exp.id,
-        category: labelMap[exp.category] ?? exp.category ?? "-",
-        categoryKey: exp.category,
-        categoryEmoji: emojiMap[exp.category] ?? "✦",
-        memo: exp.memo,
-        amount: exp.amount ?? 0,
-        payer: memberMap[exp.payerUserId] ?? exp.payerUserId ?? "-",
-        date: exp.date,
-        payerUserId: exp.payerUserId,
-        currency: exp.currency,
-        splitType: exp.splitType,
-        splits: exp.splits,
-        splitMeta: exp.splitMeta
-      })),
-    [rawExpenses, memberMap]
+      rawExpenses.map((exp: any) => {
+        const categoryKey = String(exp.category ?? "general") as keyof typeof labelMap;
+        return {
+          id: exp.id,
+          category: labelMap[categoryKey] ?? exp.category ?? "-",
+          categoryKey: exp.category,
+          categoryEmoji: emojiMap[categoryKey] ?? "✦",
+          memo: exp.memo,
+          amount: exp.amount ?? 0,
+          payer: memberMap[exp.payerUserId] ?? exp.payerUserId ?? "-",
+          date: exp.date,
+          payerUserId: exp.payerUserId,
+          currency: exp.currency,
+          splitType: exp.splitType,
+          splits: exp.splits,
+          splitMeta: exp.splitMeta
+        };
+      }),
+    [rawExpenses, memberMap, labelMap, emojiMap]
   );
-
-  async function computeSettlement() {
-    const data = await fetchWithAuth(`/api/groups/${params.groupId}/settlements/compute`, {
-      method: "POST"
-    });
-    setSettlement({
-      payloadJson: { balances: data.balances, transfers: data.transfers }
-    });
-  }
 
   async function downloadCsv() {
     setExportPending(true);

@@ -108,7 +108,7 @@ export default function SettingsPage({ params }: { params: { groupId: string } }
   useEffect(() => {
     if (groupName) setTitleInput(groupName);
     if (groupIcon) setIconInput(groupIcon);
-  }, [groupName]);
+  }, [groupName, groupIcon]);
 
   async function deleteGroup() {
     const confirmed = window.confirm(copy.group.deleteConfirm);

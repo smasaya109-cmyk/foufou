@@ -1,15 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import useSWR from "swr";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "@/lib/firebase-client";
 import { fetchWithAuth } from "@/lib/client-api";
 import { swrFetcher } from "@/lib/swr";
 import { useLang } from "@/hooks/useLang";
+import { getCopy } from "@/lib/i18n";
 
 export default function PhotoGallery({ groupId }: { groupId: string }) {
   const lang = useLang();
+  const copy = getCopy(lang);
   const { data, mutate } = useSWR(`/api/groups/${groupId}/photos`, swrFetcher, {
     revalidateOnFocus: false
   });
@@ -96,7 +99,15 @@ export default function PhotoGallery({ groupId }: { groupId: string }) {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {photos.map((photo: any) => (
             <div key={photo.id} className="overflow-hidden rounded-2xl border border-[var(--stroke)] bg-white">
-              <img src={photo.url} alt={photo.name ?? "photo"} className="h-48 w-full object-cover" />
+              <div className="relative h-48 w-full">
+                <Image
+                  src={photo.url}
+                  alt={photo.name ?? "photo"}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 33vw"
+                  className="object-cover"
+                />
+              </div>
               <div className="flex items-center justify-between px-3 py-2 text-xs text-muted">
                 <span>{photo.name ?? (lang === "en" ? "Untitled" : "写真")}</span>
                 <a

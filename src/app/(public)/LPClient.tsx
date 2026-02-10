@@ -109,10 +109,13 @@ export default function LPClient({ initialLang }: Props) {
             </p>
           </div>
           <div className="mt-8 flex justify-center">
-            <img
+            <Image
               src={lang === "en" ? "/hero-app-en.webp" : "/hero-app.webp"}
               alt={t("アプリ画面のプレビュー", "App preview")}
+              width={900}
+              height={1200}
               className="w-[120%] max-w-none object-contain md:-mt-2 md:w-full md:max-w-[50rem]"
+              priority
             />
           </div>
           <div className="mt-2 flex justify-center">
@@ -146,7 +149,13 @@ export default function LPClient({ initialLang }: Props) {
                 <h3 className="text-2xl font-semibold">{item.title}</h3>
                 <p className="text-sm text-muted">{item.desc}</p>
               </div>
-              <img src={item.image} alt={item.alt} className="w-full max-w-[520px] object-contain" />
+              <Image
+                src={item.image}
+                alt={item.alt}
+                width={900}
+                height={600}
+                className="w-full max-w-[520px] object-contain"
+              />
             </div>
           ))}
         </section>
