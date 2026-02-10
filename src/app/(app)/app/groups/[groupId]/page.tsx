@@ -554,7 +554,7 @@ export default function GroupPage({
         <div className="fixed inset-0 z-50 bg-black/40">
           <div className="fixed inset-0 flex items-start justify-center px-4 pb-24 pt-6 md:items-center md:pb-10">
             <div className="w-full max-w-2xl">
-              <div className="card max-h-[85vh] overflow-y-auto rounded-3xl bg-white p-6 shadow-xl">
+              <div className="card max-h-[85vh] w-full overflow-y-auto overflow-x-hidden rounded-3xl bg-white p-6 shadow-xl">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-semibold">
                     {activeExpense ? copy.expenses.edit : copy.expenses.add}

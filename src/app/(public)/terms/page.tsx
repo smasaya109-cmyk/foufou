@@ -413,7 +413,7 @@ export default function TermsPage() {
             </section>
             <section className="space-y-2">
               <h2 className="text-lg font-semibold text-[var(--ink-strong)]">{t("事業者の所在", "Address")}</h2>
-              <p>{t("〒759-0207 山口県宇部市大字際波2406-7", "2406-7 Kiwanami, Ube, Yamaguchi 759-0207, Japan")}</p>
+              <p>{t("3 P.Datuashvili St, Tbilisi 0183, Georgia", "3 P.Datuashvili St, Tbilisi 0183, Georgia")}</p>
             </section>
             <section className="space-y-2">
               <h2 className="text-lg font-semibold text-[var(--ink-strong)]">{t("連絡先", "Contact")}</h2>

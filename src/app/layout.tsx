@@ -17,7 +17,11 @@ const notoSansJp = Noto_Sans_JP({
 
 export const metadata = {
   title: "FouFou",
-  description: "Group travel expense splitting"
+  description: "Group travel expense splitting",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png"
+  }
 };
 
 export default function RootLayout({

@@ -73,7 +73,7 @@ export default function ExpenseForm({
     <div className="space-y-6">
       <div className="space-y-2">
         <label className="text-sm font-semibold">{copy.expenses.title}</label>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <input
             className="input-soft flex-1"
             placeholder={copy.expenses.titlePlaceholder}
@@ -83,14 +83,14 @@ export default function ExpenseForm({
           <div className="relative">
             <button
               type="button"
-              className="flex h-12 items-center justify-center rounded-xl border border-[var(--stroke)] bg-white px-4 text-lg"
+              className="flex h-12 w-16 items-center justify-center rounded-xl border border-[var(--stroke)] bg-white px-4 text-lg"
               onClick={() => setCategoryOpen((prev) => !prev)}
               aria-label={copy.expenses.categorySelect}
             >
               {selectedCategory.emoji}
             </button>
             {categoryOpen ? (
-              <div className="absolute right-0 top-14 z-20 w-56 overflow-hidden rounded-2xl border border-[var(--stroke)] bg-white shadow-xl">
+              <div className="absolute left-0 top-14 z-20 w-56 max-w-[calc(100vw-3rem)] overflow-hidden rounded-2xl border border-[var(--stroke)] bg-white shadow-xl sm:left-auto sm:right-0">
                 {categories.map((option) => (
                   <button
                     type="button"
@@ -113,14 +113,14 @@ export default function ExpenseForm({
 
       <div className="space-y-2">
         <label className="text-sm font-semibold">{copy.expenses.amount}</label>
-        <div className="flex items-center gap-3">
-            <input
-              className="input-soft flex-1 text-lg"
-              placeholder="0"
-              type="number"
-              value={amount}
-              onChange={(event) => setAmount(event.target.value)}
-            />
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <input
+            className="input-soft flex-1 text-lg"
+            placeholder="0"
+            type="number"
+            value={amount}
+            onChange={(event) => setAmount(event.target.value)}
+          />
           <div className="flex h-12 w-20 items-center justify-center rounded-xl border border-[var(--stroke)] bg-white">
             {currency === "JPY" ? "¥" : currency === "USD" ? "$" : currency === "EUR" ? "€" : currency}
           </div>
