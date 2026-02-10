@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     mode: "subscription",
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${baseUrl}/app/billing?success=1`,
-    cancel_url: `${baseUrl}/app/billing?canceled=1`,
+    cancel_url: `${baseUrl}/app/subscription?canceled=1`,
     metadata: {
       user_id: user.id,
       sku_type: parsed.data.plan === "yearly" ? "premium_yearly" : "premium_monthly",
