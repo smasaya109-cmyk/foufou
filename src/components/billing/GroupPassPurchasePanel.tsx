@@ -45,7 +45,11 @@ export default function GroupPassPurchasePanel({ groupId }: { groupId?: string }
             ? "Buy group pass"
             : "グループパスを購入"}
       </button>
-      {error ? <p className="mt-2 text-xs text-red-600">{error}</p> : null}
+      {error ? (
+        <p className="mt-2 text-xs text-red-600">
+          {error} {copy.common.supportSuffix}
+        </p>
+      ) : null}
     </div>
   );
 }

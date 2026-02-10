@@ -57,16 +57,12 @@ export default function GroupPage({
   const [saveError, setSaveError] = useState<string | null>(null);
   const [exportPending, setExportPending] = useState(false);
 
-  const { data: groupData } = useSWR(`/api/groups/${params.groupId}`, swrFetcher, {
+  const groupKey = `/api/groups/${params.groupId}?include=expenses`;
+  const { data: groupData, mutate: mutateGroup } = useSWR(groupKey, swrFetcher, {
     revalidateOnFocus: false,
     keepPreviousData: true,
     dedupingInterval: 15000
   });
-  const { data: expensesData, mutate: mutateExpenses } = useSWR(
-    `/api/groups/${params.groupId}/expenses`,
-    swrFetcher,
-    { revalidateOnFocus: false, keepPreviousData: true, dedupingInterval: 15000 }
-  );
 
   useEffect(() => {
     if (!showAdd) {
@@ -164,7 +160,7 @@ export default function GroupPage({
     }));
   }, [settlement, memberMap]);
 
-  const rawExpenses = (expensesData?.expenses ?? []) as any[];
+  const rawExpenses = (groupData?.expenses ?? []) as any[];
   const emojiMap: Record<string, string> = {
     accommodation: "🏨",
     entertainment: "🎤",
@@ -249,7 +245,7 @@ export default function GroupPage({
     setSavePending(true);
     try {
       await fetchWithAuth(`/api/expenses/${activeExpense.id}/duplicate`, { method: "POST" });
-      await mutateExpenses();
+      await mutateGroup();
       setActionOpen(false);
     } finally {
       setSavePending(false);
@@ -319,15 +315,17 @@ export default function GroupPage({
         ? { expenses: rawExpenses.map((exp) => (exp.id === activeExpense.id ? optimisticExpense : exp)) }
         : { expenses: [optimisticExpense, ...rawExpenses] };
       const settlePromise = computeSettlement();
-      await mutateExpenses(
+      await mutateGroup(
         async (current: { expenses?: any[] } | undefined) => {
+          const currentExpenses = current?.expenses ?? [];
           if (activeExpense?.id) {
             await fetchWithAuth(`/api/expenses/${activeExpense.id}`, {
               method: "PATCH",
               body: JSON.stringify(payload)
             });
             return {
-              expenses: (current?.expenses ?? []).map((exp: any) =>
+              ...current,
+              expenses: currentExpenses.map((exp: any) =>
                 exp.id === activeExpense.id ? { ...payload, id: activeExpense.id } : exp
               )
             };
@@ -337,10 +335,11 @@ export default function GroupPage({
             body: JSON.stringify(payload)
           });
           return {
-            expenses: [{ ...payload, id: res.id }, ...(current?.expenses ?? [])]
+            ...current,
+            expenses: [{ ...payload, id: res.id }, ...currentExpenses]
           };
         },
-        { optimisticData, rollbackOnError: true, populateCache: true, revalidate: false }
+        { optimisticData: { ...groupData, ...optimisticData }, rollbackOnError: true, populateCache: true, revalidate: false }
       );
       setShowAdd(false);
       setActiveExpense(null);
@@ -365,14 +364,16 @@ export default function GroupPage({
         expenses: rawExpenses.filter((exp: any) => exp.id !== activeExpense.id)
       };
       const settlePromise = computeSettlement();
-      await mutateExpenses(
+      await mutateGroup(
         async (current: { expenses?: any[] } | undefined) => {
+          const currentExpenses = current?.expenses ?? [];
           await fetchWithAuth(`/api/expenses/${activeExpense.id}`, { method: "DELETE" });
           return {
-            expenses: (current?.expenses ?? []).filter((exp: any) => exp.id !== activeExpense.id)
+            ...current,
+            expenses: currentExpenses.filter((exp: any) => exp.id !== activeExpense.id)
           };
         },
-        { optimisticData, rollbackOnError: true, populateCache: true, revalidate: false }
+        { optimisticData: { ...groupData, ...optimisticData }, rollbackOnError: true, populateCache: true, revalidate: false }
       );
       setActionOpen(false);
       setActiveExpense(null);
@@ -472,7 +473,7 @@ export default function GroupPage({
               </button>
             </div>
           </div>
-          {!expensesData ? (
+          {!groupData ? (
             <div className="flex items-center gap-3 text-sm text-muted">
               <Spinner size={20} />
               <span>{copy.common.loading}</span>

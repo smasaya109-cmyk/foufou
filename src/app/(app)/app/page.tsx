@@ -190,13 +190,37 @@ export default function AppPage() {
         </div>
       </div>
 
-      <PaywallBanner
-        title={copy.dashboard.freeLimitTitle}
-        description={copy.dashboard.freeLimitDesc}
-        actionLabel={copy.dashboard.freeLimitAction}
-        actionHref="/app/subscription"
-        iconSrc="/foufou_mascot.webp"
-      />
+      {userPlan === "free" ? (
+        <PaywallBanner
+          title={copy.dashboard.freeLimitTitle}
+          description={copy.dashboard.freeLimitDesc}
+          actionLabel={copy.dashboard.freeLimitAction}
+          actionHref="/app/subscription"
+          iconSrc="/foufou_mascot.webp"
+        />
+      ) : userPlan === "pro" ? (
+        <PaywallBanner
+          title={lang === "en" ? "Unlock Premium" : "Premiumを解放"}
+          description={
+            lang === "en"
+              ? "Photo memories and unlimited editors are available on Premium."
+              : "写真共有と共同編集無制限はPremiumで利用できます。"
+          }
+          actionLabel={lang === "en" ? "See Premium →" : "Premiumを見る →"}
+          actionHref="/app/subscription"
+          iconSrc="/foufou_mascot.webp"
+        />
+      ) : (
+        <PaywallBanner
+          title={lang === "en" ? "Try Photo Memories" : "写真共有を使ってみる"}
+          description={
+            lang === "en"
+              ? "Open a trip and share photos from the Memories tab."
+              : "旅行を開いて、思い出タブから写真を共有できます。"
+          }
+          iconSrc="/foufou_mascot.webp"
+        />
+      )}
 
       {isLoading && !data ? (
         <div className="flex items-center gap-3 text-sm text-muted">

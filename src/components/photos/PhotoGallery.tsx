@@ -87,7 +87,11 @@ export default function PhotoGallery({ groupId }: { groupId: string }) {
           />
         </div>
       ) : null}
-      {error ? <p className="text-sm text-red-500">{error}</p> : null}
+      {error ? (
+        <p className="text-sm text-red-500">
+          {error} {copy.common.supportSuffix}
+        </p>
+      ) : null}
       {photos.length ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {photos.map((photo: any) => (

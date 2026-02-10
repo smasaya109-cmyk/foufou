@@ -10,11 +10,12 @@ export default function ProStatusCard() {
     revalidateOnFocus: false,
     keepPreviousData: true
   });
-  const plan = data?.entitlements?.label ?? "Free";
+  const plan = data?.plan ?? "free";
+  const label = plan === "premium" ? "Premium" : plan === "pro" ? "Pro" : "Free";
   return (
     <div className="card p-4">
       <p className="font-semibold">{lang === "en" ? "Pro status" : "現在のPro状態"}</p>
-      <p className="text-sm text-muted">{plan}</p>
+      <p className="text-sm text-muted">{label}</p>
     </div>
   );
 }

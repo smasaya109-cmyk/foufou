@@ -12,6 +12,8 @@ export async function GET(
 ) {
   const user = await requireAuth(request);
   await requireGroupMember(user.id, params.groupId);
+  const searchParams = new URL(request.url).searchParams;
+  const include = searchParams.get("include") ?? "";
 
   const groupSnap = await adminDb.collection("groups").doc(params.groupId).get();
   if (!groupSnap.exists) {
@@ -20,6 +22,16 @@ export async function GET(
 
   const membersSnap = await groupMembersRef(params.groupId).get();
   const members = membersSnap.docs.map((doc) => doc.data());
+  const expenses =
+    include.split(",").includes("expenses")
+      ? await adminDb
+          .collection("groups")
+          .doc(params.groupId)
+          .collection("expenses")
+          .orderBy("date", "desc")
+          .get()
+          .then((snap) => snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })))
+      : undefined;
   const [userPlan, premiumAccess] = await Promise.all([
     getUserPlan(user.id),
     canUsePremium(user.id, params.groupId)
@@ -33,7 +45,8 @@ export async function GET(
 
   return NextResponse.json({
     group: { id: groupSnap.id, ...groupSnap.data(), members },
-    entitlements
+    entitlements,
+    expenses
   });
 }
 

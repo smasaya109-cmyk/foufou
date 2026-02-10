@@ -218,7 +218,11 @@ export default function NewExpensePage({ params }: { params: { groupId: string }
         />
       </div>
 
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+      {error ? (
+        <p className="text-sm text-red-600">
+          {error} {copy.common.supportSuffix}
+        </p>
+      ) : null}
 
       <div className="flex gap-3">
         <button

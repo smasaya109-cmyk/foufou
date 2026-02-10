@@ -335,7 +335,9 @@ export default function GroupForm({
           </button>
         </div>
         {participantError ? (
-          <p className="text-xs text-red-600">{participantError}</p>
+          <p className="text-xs text-red-600">
+            {participantError} {copy.common.supportSuffix}
+          </p>
         ) : null}
       </div>
     </div>

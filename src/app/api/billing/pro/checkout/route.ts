@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { requireAuth } from "@/lib/auth";
 import { stripe } from "@/lib/stripe";
+import { adminDb } from "@/lib/firebase-admin";
 
 const schema = z.object({
   plan: z.enum(["monthly", "yearly"]).default("monthly")
@@ -28,11 +29,16 @@ export async function POST(request: Request) {
 
   const baseUrl = process.env.APP_BASE_URL ?? "http://localhost:3000";
 
+  const userSnap = await adminDb.collection("users").doc(user.id).get();
+  const stripeCustomerId = userSnap.data()?.stripeCustomerId as string | undefined;
+
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${baseUrl}/app/billing?success=1`,
     cancel_url: `${baseUrl}/app/subscription?canceled=1`,
+    customer: stripeCustomerId,
+    customer_email: stripeCustomerId ? undefined : user.email ?? undefined,
     metadata: {
       user_id: user.id,
       sku_type: parsed.data.plan === "yearly" ? "pro_yearly" : "pro_monthly",

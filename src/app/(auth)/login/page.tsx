@@ -70,7 +70,11 @@ export default function LoginPage() {
             onChange={(event) => setPassword(event.target.value)}
             required
           />
-          {error ? <p className="text-sm text-red-600">{error}</p> : null}
+          {error ? (
+            <p className="text-sm text-red-600">
+              {error} {copy.common.supportSuffix}
+            </p>
+          ) : null}
           <button className="rounded-full bg-black px-4 py-2 text-white" type="submit">
             {copy.auth.loginButton}
           </button>

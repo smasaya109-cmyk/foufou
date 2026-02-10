@@ -24,7 +24,11 @@ export default function DangerZone({
         {lang === "en" ? "Danger Zone" : "Danger Zone"}
       </p>
       <p className="text-sm text-red-600">{copy.group.dangerNote}</p>
-      {error ? <p className="mt-2 text-sm text-red-700">{error}</p> : null}
+      {error ? (
+        <p className="mt-2 text-sm text-red-700">
+          {error} {copy.common.supportSuffix}
+        </p>
+      ) : null}
       <button
         className={`mt-3 w-full rounded-full border border-red-200 bg-white px-4 py-2 text-sm text-red-600 ${
           archiveDisabled ? "opacity-60" : ""

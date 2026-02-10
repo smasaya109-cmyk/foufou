@@ -52,7 +52,8 @@ export const JA = {
     processing: "処理中...",
     preparing: "準備中",
     requiredLogin: "ログインが必要です",
-    errorGeneric: "読み込みに失敗しました"
+    errorGeneric: "読み込みに失敗しました",
+    supportSuffix: "解決しない場合はサポートまでご連絡ください。"
   },
   auth: {
     loginTitle: "ログイン",
@@ -346,7 +347,8 @@ export const EN = {
     processing: "Processing...",
     preparing: "Preparing",
     requiredLogin: "Login required",
-    errorGeneric: "Failed to load"
+    errorGeneric: "Failed to load",
+    supportSuffix: "If the issue persists, please contact support."
   },
   auth: {
     loginTitle: "Log in",
