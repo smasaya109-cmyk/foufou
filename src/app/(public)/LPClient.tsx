@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import LangToggle from "@/components/common/LangToggle";
+import Reveal from "@/components/marketing/Reveal";
 import { useLang } from "@/hooks/useLang";
 import type { Lang } from "@/lib/i18n";
 
@@ -71,10 +72,10 @@ export default function LPClient({ initialLang }: Props) {
             alt={t("FouFouのマスコット", "FouFou mascot")}
             width={80}
             height={80}
-            className="mx-auto object-contain"
+            className="lp-hero-enter lp-hero-enter--float mx-auto object-contain"
             priority
           />
-          <div className="space-y-4">
+          <div className="lp-hero-enter lp-hero-enter--slow space-y-4" style={{ animationDelay: "120ms" }}>
             <p className="pill mx-auto w-fit bg-[var(--accent)] text-white">FouFou</p>
             <h1 className="text-4xl font-semibold md:text-5xl">
               {lang === "ja" ? (
@@ -108,7 +109,7 @@ export default function LPClient({ initialLang }: Props) {
               {t("ボタンを押すとログイン画面へ移動します。", "Tapping the button takes you to login.")}
             </p>
           </div>
-          <div className="mt-8 flex justify-center">
+          <div className="lp-hero-enter mt-8 flex justify-center" style={{ animationDelay: "220ms" }}>
             <Image
               src={lang === "en" ? "/hero-app-en.webp" : "/hero-app.webp"}
               alt={t("アプリ画面のプレビュー", "App preview")}
@@ -118,7 +119,7 @@ export default function LPClient({ initialLang }: Props) {
               priority
             />
           </div>
-          <div className="mt-2 flex justify-center">
+          <div className="lp-hero-enter mt-2 flex justify-center" style={{ animationDelay: "300ms" }}>
             <Link href="/login" className="btn-primary">
               {t("グループを作成する", "Create a group")}
             </Link>
@@ -126,18 +127,22 @@ export default function LPClient({ initialLang }: Props) {
         </section>
 
         <section className="grid gap-6 md:grid-cols-3">
-          {highlights.map((feature) => (
-            <div key={feature.title} className="card p-6">
+          {highlights.map((feature, index) => (
+            <Reveal key={feature.title} delayMs={index * 90} variant="up">
+              <div className="card h-full p-6">
               <h3 className="font-semibold">{feature.title}</h3>
               <p className="mt-2 text-sm text-muted">{feature.desc}</p>
-            </div>
+              </div>
+            </Reveal>
           ))}
         </section>
 
         <section className="space-y-10">
           {sections.map((item, index) => (
-            <div
+            <Reveal
               key={item.title}
+              variant={index % 2 === 0 ? "left" : "right"}
+              delayMs={80}
               className={`grid items-center gap-8 lg:grid-cols-[1fr_1fr] ${
                 index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
               }`}
@@ -156,11 +161,11 @@ export default function LPClient({ initialLang }: Props) {
                 height={600}
                 className="w-full max-w-[520px] object-contain"
               />
-            </div>
+            </Reveal>
           ))}
         </section>
 
-        <section className="space-y-8">
+        <Reveal as="section" className="space-y-8" variant="up">
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.2em] text-muted">
               {t("料金プラン", "Pricing")}
@@ -319,9 +324,9 @@ export default function LPClient({ initialLang }: Props) {
               </div>
             </div>
           </div>
-        </section>
+        </Reveal>
 
-        <section className="space-y-6">
+        <Reveal as="section" className="space-y-6" variant="up">
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.2em] text-muted">FAQ</p>
             <h2 className="text-3xl font-semibold">{t("よくある質問", "FAQ")}</h2>
@@ -352,9 +357,13 @@ export default function LPClient({ initialLang }: Props) {
               </p>
             </details>
           </div>
-        </section>
+        </Reveal>
 
-        <footer className="flex flex-col items-center justify-between gap-4 border-t border-[var(--stroke)] pt-6 text-xs text-muted md:flex-row">
+        <Reveal
+          as="footer"
+          className="flex flex-col items-center justify-between gap-4 border-t border-[var(--stroke)] pt-6 text-xs text-muted md:flex-row"
+          variant="up"
+        >
           <p>© 2026 FouFou</p>
           <div className="flex flex-wrap items-center gap-3">
             <Link href="/terms" className="hover:text-[var(--ink-strong)]">
@@ -364,7 +373,7 @@ export default function LPClient({ initialLang }: Props) {
           <div className="flex items-center gap-2 rounded-full border border-[var(--stroke)] bg-white px-2 py-1">
             <LangToggle />
           </div>
-        </footer>
+        </Reveal>
       </div>
     </main>
   );

@@ -100,3 +100,83 @@ body {
 .reveal {
   animation: floatIn 0.5s ease-out both;
 }
+
+.lp-hero-enter {
+  opacity: 0;
+  transform: translateY(18px) scale(0.985);
+  animation: lpHeroEnter 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.lp-hero-enter--slow {
+  animation-duration: 1s;
+}
+
+.lp-hero-enter--float {
+  animation-name: lpHeroEnter, lpSoftFloat;
+  animation-duration: 0.8s, 4.8s;
+  animation-delay: 0ms, 1000ms;
+  animation-iteration-count: 1, infinite;
+  animation-direction: normal, alternate;
+}
+
+.lp-reveal {
+  opacity: 0;
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.lp-reveal--up {
+  transform: translateY(32px);
+}
+
+.lp-reveal--left {
+  transform: translateX(-32px);
+}
+
+.lp-reveal--right {
+  transform: translateX(32px);
+}
+
+.lp-reveal--scale {
+  transform: translateY(18px) scale(0.97);
+}
+
+.lp-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+@keyframes lpHeroEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes lpSoftFloat {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-hero-enter,
+  .lp-hero-enter--slow,
+  .lp-hero-enter--float,
+  .lp-reveal,
+  .lp-reveal.is-visible {
+    opacity: 1;
+    animation: none;
+    transform: none;
+    transition: none;
+  }
+}
