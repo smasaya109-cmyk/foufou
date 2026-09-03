@@ -108,19 +108,86 @@ export default function GroupPage({
     });
     setMemberMap(map);
     setMemberOptions(options);
-    if (options.length && !payerUserId) {
-      setPayerUserId(options[0].id);
+    setPayerUserId((prev) =>
+      prev && options.some((m) => m.id === prev) ? prev : options[0]?.id ?? ""
+    );
+    setSelectedMemberIds((prev) => {
+      const ids = options.map((m) => m.id);
+      const kept = prev.filter((id) => ids.includes(id));
+      return kept.length ? kept : ids;
+    });
+    setRatioMap((prev) => (Object.keys(prev).length ? prev : defaultRatios(options)));
+  }, [groupData]);
+
+  function defaultRatios(options: MemberOption[]) {
+    const nextRatios: Record<string, number> = {};
+    if (!options.length) return nextRatios;
+    const baseRatio = Math.floor(100 / options.length);
+    options.forEach((m, index) => {
+      nextRatios[m.id] = baseRatio + (index === 0 ? 100 - baseRatio * options.length : 0);
+    });
+    return nextRatios;
+  }
+
+  // 3) Always start from a clean form so rounding/ratio/split settings never leak between expenses.
+  function resetForm() {
+    setActiveExpense(null);
+    setTitle("");
+    setAmount("");
+    setDate("");
+    setCategory("food");
+    setSplitLabel("equal");
+    setSelectedMemberIds(memberOptions.map((m) => m.id));
+    setRatioMap(defaultRatios(memberOptions));
+    setRoundingUnit("none");
+    setRoundingMode("round");
+    setRoundingTarget("payer");
+    setSaveError(null);
+  }
+
+  function openAdd() {
+    resetForm();
+    setShowAdd(true);
+  }
+
+  // 4) Single source of truth for the split math (used for saving and for the live preview).
+  //    "equal" always splits across every member; only select/ratio/subgroup use the checkboxes.
+  function computeSplits(amountInt: number) {
+    const targets =
+      splitLabel === "equal"
+        ? memberOptions
+        : memberOptions.filter((m) => selectedMemberIds.includes(m.id));
+    if (!targets.length) return null;
+    let splits: Array<{ userId: string; shareAmount: number }> = [];
+    if (splitLabel === "ratio") {
+      const totalRatio = targets.reduce((sum, m) => sum + (ratioMap[m.id] ?? 0), 0);
+      if (!totalRatio) return null;
+      splits = targets.map((m) => ({
+        userId: m.id,
+        shareAmount: Math.floor((amountInt * (ratioMap[m.id] ?? 0)) / totalRatio)
+      }));
+      const remainder = amountInt - splits.reduce((sum, s) => sum + s.shareAmount, 0);
+      splits[0].shareAmount += remainder;
+    } else {
+      const base = Math.floor(amountInt / targets.length);
+      const remainder = amountInt - base * targets.length;
+      splits = targets.map((m, index) => ({
+        userId: m.id,
+        shareAmount: base + (index === 0 ? remainder : 0)
+      }));
     }
-    setSelectedMemberIds(options.map((m) => m.id));
-    if (options.length) {
-      const baseRatio = Math.floor(100 / options.length);
-      const nextRatios: Record<string, number> = {};
-      options.forEach((m, index) => {
-        nextRatios[m.id] = baseRatio + (index === 0 ? 100 - baseRatio * options.length : 0);
-      });
-      setRatioMap((prev) => (Object.keys(prev).length ? prev : nextRatios));
-    }
-  }, [groupData, payerUserId]);
+    return applyRounding(splits, amountInt);
+  }
+
+  const previewShares = (() => {
+    const result: Record<string, number> = {};
+    const amountInt = Math.round(Number(amount));
+    if (!amountInt || amountInt <= 0) return result;
+    (computeSplits(amountInt) ?? []).forEach((s) => {
+      result[s.userId] = s.shareAmount;
+    });
+    return result;
+  })();
 
   const entitlements = groupData?.entitlements;
   const premiumLabel = entitlements?.label ?? "Free";
@@ -136,13 +203,17 @@ export default function GroupPage({
     });
   }, [params.groupId]);
 
+  // Always recompute from the current expenses when the tab opens. The stored "latest"
+  // settlement can be stale (e.g. computed before an expense was written), so it is only a fallback.
   const loadSettlementLatest = useCallback(async () => {
-    const data = await fetchWithAuth(`/api/groups/${params.groupId}/settlements/latest`);
-    if (data?.settlement) {
-      setSettlement(data.settlement);
-      return;
+    try {
+      await computeSettlement();
+    } catch {
+      const data = await fetchWithAuth(`/api/groups/${params.groupId}/settlements/latest`);
+      if (data?.settlement) {
+        setSettlement(data.settlement);
+      }
     }
-    await computeSettlement();
   }, [params.groupId, computeSettlement]);
 
   useEffect(() => {
@@ -259,6 +330,7 @@ export default function GroupPage({
       await fetchWithAuth(`/api/expenses/${activeExpense.id}/duplicate`, { method: "POST" });
       await mutateGroup();
       setActionOpen(false);
+      computeSettlement().catch(() => {});
     } finally {
       setSavePending(false);
     }
@@ -268,7 +340,7 @@ export default function GroupPage({
     setSaveError(null);
     setSavePending(true);
     try {
-      const amountInt = Number(amount);
+      const amountInt = Math.round(Number(amount));
       if (!amountInt || amountInt <= 0) {
         setSaveError(copy.expenses.amountError);
         return;
@@ -277,29 +349,11 @@ export default function GroupPage({
         setSaveError(copy.expenses.payerError);
         return;
       }
-      const targets = memberOptions.filter((m) => selectedMemberIds.includes(m.id));
-      let splits: Array<{ userId: string; shareAmount: number }> = [];
-      if (splitLabel === "ratio") {
-        const totalRatio = targets.reduce((sum, m) => sum + (ratioMap[m.id] ?? 0), 0);
-        if (!totalRatio) {
-          setSaveError(copy.expenses.amountError);
-          return;
-        }
-        splits = targets.map((m) => ({
-          userId: m.id,
-          shareAmount: Math.floor((amountInt * (ratioMap[m.id] ?? 0)) / totalRatio)
-        }));
-        const remainder = amountInt - splits.reduce((sum, s) => sum + s.shareAmount, 0);
-        if (splits.length) splits[0].shareAmount += remainder;
-      } else {
-        const base = Math.floor(amountInt / (targets.length || 1));
-        const remainder = amountInt - base * targets.length;
-        splits = targets.map((m, index) => ({
-          userId: m.id,
-          shareAmount: base + (index === 0 ? remainder : 0)
-        }));
+      const splits = computeSplits(amountInt);
+      if (!splits) {
+        setSaveError(copy.expenses.splitTargetError);
+        return;
       }
-      splits = applyRounding(splits, amountInt);
       const isoDate = date ? new Date(`${date}T00:00:00Z`).toISOString() : new Date().toISOString();
       const payload = {
         payerUserId,
@@ -312,7 +366,7 @@ export default function GroupPage({
         splits,
         splitMeta: {
           ratios: splitLabel === "ratio" ? ratioMap : undefined,
-          subgroup: splitLabel === "subgroup" ? selectedMemberIds : undefined,
+          subgroup: splitLabel === "subgroup" ? splits.map((s) => s.userId) : undefined,
           rounding:
             roundingUnit === "none"
               ? undefined
@@ -326,7 +380,6 @@ export default function GroupPage({
       const optimisticData = activeExpense?.id
         ? { expenses: rawExpenses.map((exp) => (exp.id === activeExpense.id ? optimisticExpense : exp)) }
         : { expenses: [optimisticExpense, ...rawExpenses] };
-      const settlePromise = computeSettlement();
       await mutateGroup(
         async (current: { expenses?: any[] } | undefined) => {
           const currentExpenses = current?.expenses ?? [];
@@ -354,12 +407,9 @@ export default function GroupPage({
         { optimisticData: { ...groupData, ...optimisticData }, rollbackOnError: true, populateCache: true, revalidate: false }
       );
       setShowAdd(false);
-      setActiveExpense(null);
-      setTitle("");
-      setAmount("");
-      setDate("");
-      setSelectedMemberIds(memberOptions.map((m) => m.id));
-      settlePromise.catch(() => {});
+      resetForm();
+      // Recompute from the persisted data (must run after the write, not concurrently with it).
+      computeSettlement().catch(() => {});
     } catch (err: any) {
       setSaveError(err?.message ?? copy.expenses.saveFailed);
     } finally {
@@ -375,7 +425,6 @@ export default function GroupPage({
       const optimisticData = {
         expenses: rawExpenses.filter((exp: any) => exp.id !== activeExpense.id)
       };
-      const settlePromise = computeSettlement();
       await mutateGroup(
         async (current: { expenses?: any[] } | undefined) => {
           const currentExpenses = current?.expenses ?? [];
@@ -389,7 +438,7 @@ export default function GroupPage({
       );
       setActionOpen(false);
       setActiveExpense(null);
-      settlePromise.catch(() => {});
+      computeSettlement().catch(() => {});
     } catch (err: any) {
       setSaveError(err?.message ?? copy.expenses.deleteFailed);
     } finally {
@@ -407,16 +456,13 @@ export default function GroupPage({
     setPayerUserId(expense.payerUserId ?? "");
     setCategory(expense.categoryKey ?? "food");
     setSplitLabel(expense.splitType ?? "equal");
+    setSaveError(null);
     const ratios = (expense as any)?.splitMeta?.ratios as Record<string, number> | undefined;
-    if (ratios) {
-      setRatioMap(ratios);
-    }
+    setRatioMap(ratios && Object.keys(ratios).length ? ratios : defaultRatios(memberOptions));
     const rounding = (expense as any)?.splitMeta?.rounding;
-    if (rounding) {
-      setRoundingUnit(rounding.unit ?? "none");
-      setRoundingMode(rounding.mode ?? "round");
-      setRoundingTarget(rounding.target ?? "payer");
-    }
+    setRoundingUnit(rounding?.unit ?? "none");
+    setRoundingMode(rounding?.mode ?? "round");
+    setRoundingTarget(rounding?.target ?? "payer");
     const expDate = expense.date ? new Date(expense.date) : null;
     if (expDate && !Number.isNaN(expDate.getTime())) {
       setDate(expDate.toISOString().slice(0, 10));
@@ -478,7 +524,7 @@ export default function GroupPage({
               ) : null}
               <button
                 className="btn-primary hidden items-center gap-2 md:flex"
-                onClick={() => setShowAdd(true)}
+                onClick={openAdd}
               >
                 <span className="text-lg leading-none">＋</span>
                 {copy.expenses.add}
@@ -502,7 +548,7 @@ export default function GroupPage({
           )}
           <button
             className="fixed bottom-24 right-6 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--accent)] text-2xl text-white shadow-lg md:hidden"
-            onClick={() => setShowAdd(true)}
+            onClick={openAdd}
             aria-label={copy.expenses.add}
           >
             ＋
@@ -592,6 +638,7 @@ export default function GroupPage({
                     setCategory={setCategory}
                     categories={categories}
                     members={memberOptions}
+                    previewShares={previewShares}
                     selectedMemberIds={selectedMemberIds}
                     toggleMember={(id) =>
                       setSelectedMemberIds((prev) =>

@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { clientAuth } from "@/lib/firebase-client";
 import useSWR from "swr";
 import GroupHeader from "@/components/group/GroupHeader";
 import GroupTabs from "@/components/group/GroupTabs";
@@ -30,6 +32,37 @@ export default function MembersPage({ params }: { params: { groupId: string } })
   const [localPending, setLocalPending] = useState(false);
   const lang = useLang();
   const copy = getCopy(lang);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(clientAuth.currentUser?.uid ?? null);
+  useEffect(() => onAuthStateChanged(clientAuth, (user) => setCurrentUserId(user?.uid ?? null)), []);
+  const ownerId = groupData?.group?.ownerUserId as string | undefined;
+  const isOwner = Boolean(ownerId && currentUserId && ownerId === currentUserId);
+
+  async function removeMember(id: string) {
+    setLocalError(null);
+    try {
+      await mutate(
+        async (current: { members?: any[] } | undefined) => {
+          await fetchWithAuth(`/api/groups/${params.groupId}/members`, {
+            method: "DELETE",
+            body: JSON.stringify({ userId: id })
+          });
+          return {
+            members: (current?.members ?? []).filter((m: any) => (m.userId ?? m.id) !== id)
+          };
+        },
+        {
+          optimisticData: {
+            members: (membersData?.members ?? []).filter((m: any) => (m.userId ?? m.id) !== id)
+          },
+          rollbackOnError: true,
+          populateCache: true,
+          revalidate: false
+        }
+      );
+    } catch {
+      setLocalError(copy.group.memberRemoveFailed);
+    }
+  }
 
   const members = useMemo<MemberItem[]>(
     () =>
@@ -49,6 +82,8 @@ export default function MembersPage({ params }: { params: { groupId: string } })
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
         <MemberTable
           items={members}
+          ownerId={ownerId}
+          onRemove={isOwner ? removeMember : undefined}
           onRename={async (id, name) => {
             if (!name) return;
             setLocalError(null);

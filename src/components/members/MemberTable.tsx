@@ -6,15 +6,21 @@ export type MemberItem = { id: string; name: string; joinedAt: string };
 
 export default function MemberTable({
   items,
-  onRename
+  onRename,
+  onRemove,
+  ownerId
 }: {
   items: MemberItem[];
   onRename?: (id: string, name: string) => void;
+  /** Shown only when provided (owner view). The owner row never gets a remove button. */
+  onRemove?: (id: string) => void;
+  ownerId?: string;
 }) {
   const lang = useLang();
   const copy = getCopy(lang);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
   const [nameOverrides, setNameOverrides] = useState<Record<string, string>>({});
   const rows = useMemo(
     () =>
@@ -36,10 +42,8 @@ export default function MemberTable({
       </div>
       {rows.length ? (
         rows.map((item) => (
-          <div
-            key={item.id}
-            className="mt-3 flex items-center justify-between gap-3"
-          >
+          <div key={item.id} className="mt-3">
+            <div className="flex items-center justify-between gap-3">
             {onRename ? (
               <div className="flex min-w-0 items-center gap-2">
                 {editingId === item.id ? (
@@ -96,7 +100,42 @@ export default function MemberTable({
             ) : (
               <span className="truncate">{item.name}</span>
             )}
-            <span className="text-xs text-muted">{item.displayDate}</span>
+            <div className="flex flex-none items-center gap-2">
+              {onRemove && item.id !== ownerId && editingId !== item.id && confirmRemoveId !== item.id ? (
+                <button
+                  className="rounded-full border-2 border-[var(--stroke)] px-2 py-1 text-[11px]"
+                  onClick={() => setConfirmRemoveId(item.id)}
+                  aria-label={copy.group.memberRemove}
+                  title={copy.group.memberRemove}
+                >
+                  🗑
+                </button>
+              ) : null}
+              <span className="text-xs text-muted">{item.displayDate}</span>
+            </div>
+            </div>
+            {onRemove && confirmRemoveId === item.id ? (
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-red-50 px-3 py-2">
+                <span className="text-xs text-red-700">{copy.group.memberRemoveConfirm}</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    className="rounded-full bg-red-600 px-3 py-1 text-[11px] font-semibold text-white"
+                    onClick={() => {
+                      setConfirmRemoveId(null);
+                      onRemove(item.id);
+                    }}
+                  >
+                    {copy.group.memberRemove}
+                  </button>
+                  <button
+                    className="btn-outline px-3 py-1 text-[11px]"
+                    onClick={() => setConfirmRemoveId(null)}
+                  >
+                    {copy.common.cancel}
+                  </button>
+                </div>
+              </div>
+            ) : null}
           </div>
         ))
       ) : (

@@ -33,6 +33,7 @@ export default function ExpenseForm({
   setCategory,
   categories,
   members,
+  previewShares,
   selectedMemberIds,
   toggleMember
 }: {
@@ -61,6 +62,7 @@ export default function ExpenseForm({
   setCategory: (value: string) => void;
   categories: CategoryOption[];
   members: MemberOption[];
+  previewShares?: Record<string, number>;
   selectedMemberIds: string[];
   toggleMember: (id: string) => void;
 }) {
@@ -174,7 +176,9 @@ export default function ExpenseForm({
         </div>
         <div className="rounded-2xl border border-[var(--stroke)] bg-[var(--bg-soft)] p-3">
           {members.map((member) => {
-            const checked = selectedMemberIds.includes(member.id);
+            const isEqual = splitLabel === "equal";
+            const checked = isEqual || selectedMemberIds.includes(member.id);
+            const share = previewShares?.[member.id];
             return (
               <label
                 key={member.id}
@@ -184,22 +188,26 @@ export default function ExpenseForm({
                   <input
                     type="checkbox"
                     checked={checked}
+                    disabled={isEqual}
                     onChange={() => toggleMember(member.id)}
-                    className="h-5 w-5 accent-[var(--accent)]"
+                    className="h-5 w-5 accent-[var(--accent)] disabled:opacity-60"
                   />
                   <span>{member.label}</span>
                 </div>
-                {splitLabel === "ratio" ? (
-                  <input
-                    type="number"
-                    min={0}
-                    className="w-20 rounded-lg border border-[var(--stroke)] bg-white px-2 py-1 text-xs"
-                    value={ratioMap[member.id] ?? 0}
-                    onChange={(event) => setRatio(member.id, Number(event.target.value))}
-                  />
-                ) : (
-                  <span className="text-sm text-muted">0 {currencyLabel}</span>
-                )}
+                <div className="flex items-center gap-2">
+                  {splitLabel === "ratio" && checked ? (
+                    <input
+                      type="number"
+                      min={0}
+                      className="w-20 rounded-lg border border-[var(--stroke)] bg-white px-2 py-1 text-xs"
+                      value={ratioMap[member.id] ?? 0}
+                      onChange={(event) => setRatio(member.id, Number(event.target.value))}
+                    />
+                  ) : null}
+                  <span className={`text-sm ${checked ? "font-semibold" : "text-muted"}`}>
+                    {share !== undefined ? share.toLocaleString() : checked ? "0" : "—"} {currencyLabel}
+                  </span>
+                </div>
               </label>
             );
           })}

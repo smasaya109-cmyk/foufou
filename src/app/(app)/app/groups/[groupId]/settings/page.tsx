@@ -105,10 +105,16 @@ export default function SettingsPage({ params }: { params: { groupId: string } }
     "❤️"
   ];
 
+  // Sync the inputs from the server, but never clobber an edit in progress:
+  // only overwrite when the input still holds the previously synced server value.
+  const [syncedTitle, setSyncedTitle] = useState("");
   useEffect(() => {
-    if (groupName) setTitleInput(groupName);
+    if (groupName && groupName !== syncedTitle) {
+      setTitleInput((prev) => (prev === "" || prev === syncedTitle ? groupName : prev));
+      setSyncedTitle(groupName);
+    }
     if (groupIcon) setIconInput(groupIcon);
-  }, [groupName, groupIcon]);
+  }, [groupName, groupIcon, syncedTitle]);
 
   async function deleteGroup() {
     const confirmed = window.confirm(copy.group.deleteConfirm);
@@ -167,6 +173,7 @@ export default function SettingsPage({ params }: { params: { groupId: string } }
         body: JSON.stringify({ title: titleInput.trim() })
       });
       setTitleMessage(copy.group.nameUpdateSuccess);
+      setSyncedTitle(titleInput.trim());
       mutate();
     } catch (err: any) {
       setTitleMessage(err?.message ?? copy.group.nameUpdateFailed);
